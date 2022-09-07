@@ -5,43 +5,24 @@ import { IReportService } from "./IReport.service";
 
 
 export class ReportService implements IReportService {
-/*
-
-    list the product Name. The second column
-    should contain the average quantity of the product purchased per order.
-
-*/
     constructor(private reportRepository?: IReportRepository) {
       this.reportRepository = reportRepository || new ReportRepository();
     }
-// list the product Name. The second column
-// should be the most popular Brand for that product. Most popular is defined as the brand
-// with the most total orders for the item, not the quantity purchased. If two or more brands
-// have the same popularity for a product, include any one.
 
-/*
-    shoes: {
-        brand: {
-            "Air": 2, --> Number of Orders Not Quantity
-            "BonPeid": 1
-        }
-    }
-
-    shoes: {totalamount: 0, brand: {
-        brandName:  {quantityPurchased: quantityPurchased+ current, noOfPurchasing++}
-    }
-
-*/
-// let amount =5;
-// 
-/*
- shoes -> totalamount: 1, 
- mostPopularBrand: Math.max(...array.map(o => o.y)) || Object.keys(obj).reduce((a, b) => obj[a] > obj[b] ? a : b);
-*/
-
-     public createProductAverageSalesByOrderReport(data: IProcessedProducts, filePath: string): void {
+    public createProductAverageSalesByOrderReport(data: IProcessedProducts, filePath: string): void {
       try {
-       
+            const finalReportData: any = [];
+            const totalNumberOfAllOrders = Object.values(data).reduce((a,b) => a + b.totalOrders, 0);
+            Object.keys(data).forEach((key: string) => {
+                const totalQuantityOfPurchasingForAllBrands =
+                 Object.values(data[key].brands).reduce((a,b) => a + b.quantityPurchased, 0);
+                finalReportData.push({
+                    productName: key,
+                    average: totalQuantityOfPurchasingForAllBrands / totalNumberOfAllOrders
+                })
+            }); 
+            const newFileName = `0_${filePath}`
+            this.reportRepository?.createReport(filePath, newFileName, finalReportData)
       } catch (error) {
         // Do some Logging 
         throw error;

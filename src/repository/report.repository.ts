@@ -3,7 +3,7 @@ import fs from 'fs';
 import { format } from '@fast-csv/format';
 export class ReportRepository implements IReportRepository{
     public createReport(folderName: string, filename: string, data: any[]): void {    
-        const writableStream =fs.createWriteStream(`${this.createDirectory(folderName)}/${filename}`);
+        const writableStream = fs.createWriteStream(`${this.createDirectory(folderName)}/${filename}`);
         const csvStream = format({ headers: Object.keys(data[0]) });
         writableStream.on('error',  (error) => {
             console.log(`An error occured while writing to the file. Error: ${error.message}`);
@@ -18,9 +18,8 @@ export class ReportRepository implements IReportRepository{
 
     private createDirectory(folderName: string) {
         const path = `./reports-result/${folderName}`;
-        console.log('path', fs.existsSync(`../../reports/`))
         if (!fs.existsSync(path)){
-            fs.mkdirSync(path);
+            fs.mkdirSync(path, { recursive: true });
         }
         return path;
     }

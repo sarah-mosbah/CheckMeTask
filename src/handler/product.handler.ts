@@ -25,18 +25,16 @@ export default class ProductHandler {
         try {
             const filePath = req.file?.path as string;
             const fileName = req.file?.originalname as string;
-            console.log(req.file?.fieldname);
             let finalData : IProcessedProducts = {};
-            console.log(this);
             fs.createReadStream(filePath).pipe(csv()).on('data', (data: IProduct) => {
                 finalData = this.dataProcessingService.createProductReportData(finalData, data);
             })
             .on('end', () => {
-              // this.reportService?.createProductAverageSalesByOrderReport(finalData, filePath);
+               this.reportService?.createProductAverageSalesByOrderReport(finalData, fileName);
                this.reportService?.createProductMostPopularBrandReport(finalData, fileName);
                fs.unlinkSync(filePath);
             });
-            return res.status(200).send('Uploaded Successfully');
+            return res.status(200).json({message: 'ok'});
         } catch (error) {
             return res.status(500).json({message: "internal server error"});
         }

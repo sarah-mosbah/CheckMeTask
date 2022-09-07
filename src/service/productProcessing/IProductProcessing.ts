@@ -9,15 +9,15 @@ export class DataProcessingService implements IDataProcessingService {
             processedProduct.totalOrders++;
             if(processedProduct.brands[product.Brand]) {
                 processedProduct.brands[product.Brand].noOfPurchasing++;
-                processedProduct.brands[product.Brand].quantityPurchased+= product.Quantity;
+                processedProduct.brands[product.Brand].quantityPurchased+= +product.Quantity;
             } else {
-                processedProduct.brands[product.Brand] ={ quantityPurchased: product.Quantity, noOfPurchasing: 1}
+                processedProduct.brands[product.Brand] ={ quantityPurchased: +product.Quantity, noOfPurchasing: 1}
             }
         } else {
             processedData[product.Name] = {
                 totalOrders: 1,
                 brands: {
-                    [product.Brand]: {quantityPurchased: product.Quantity, noOfPurchasing: 1}
+                    [product.Brand]: {quantityPurchased: +product.Quantity, noOfPurchasing: 1}
                 }
             }
         }

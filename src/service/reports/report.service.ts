@@ -42,7 +42,6 @@ export class ReportService implements IReportService {
             const newFileName = `1_${fileName}`
             this.reportRepository?.createReport(fileName, newFileName, finalReportData)
         } catch (error) {
-            console.log(error);
           // Do some Logging 
           throw error;
         }

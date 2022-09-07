@@ -5,15 +5,17 @@ import ProductHandler from "../handler/product.handler";
 export class ProductRoutes {
     private static instance: ProductRoutes;
     private handler = new ProductHandler();
-
     public router: Router = express.Router();
-    public upload = multer({ dest: 'temp/csv/' });
+    public upload = multer({ dest: 'temp/csv/' })
+
     constructor() {
-0
+      if(ProductRoutes.instance) {
+        return ProductRoutes.instance;
+      }
+      ProductRoutes.instance = this;
+      this.registerRoutes();
     }
-
-    protected registerRoutes(): void {
-        this.router.post('/upload-csv', this.upload.single('file'), this.handler.uploadCsvFileToServer);
+    public registerRoutes(): void {
+        this.router.post('/upload-csv', this.upload.single('file'), this.handler.uploadCsvFileToServer.bind(this.handler));
     }
-
 }

@@ -26,16 +26,13 @@ export default class ProductHandler {
             const filePath = req.file?.path as string;
             const fileName = req.file?.originalname as string;
             let finalData : IProcessedProducts = {};
-            await new Promise((resolve, reject) => {
-                fs.createReadStream(filePath).pipe(csv()).on('data', (data: IProduct) => {
-                    finalData = this.dataProcessingService.createProductReportData(finalData, data);
-                })
-                .on('end', () => {
-                   this.reportService.createProductAverageSalesByOrderReport(finalData, fileName);
-                   this.reportService.createProductMostPopularBrandReport(finalData, fileName);
-                   fs.unlinkSync(filePath);
-                   resolve(true);   
-                }).on('error', (err) => reject(err));    
+            fs.createReadStream(filePath).pipe(csv()).on('data', (data: IProduct) => {
+                finalData = this.dataProcessingService.createProductReportData(finalData, data);
+            })
+            .on('end', () => {
+               this.reportService?.createProductAverageSalesByOrderReport(finalData, fileName);
+               this.reportService?.createProductMostPopularBrandReport(finalData, fileName);
+               fs.unlinkSync(filePath);
             });
             return res.status(200).json({message: 'ok'});
         } catch (error) {

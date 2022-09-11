@@ -16,6 +16,6 @@ export class ProductRoutes {
       this.registerRoutes();
     }
     public registerRoutes(): void {
-      this.router.post('/upload-csv', this.upload.single('file'), this.handler.uploadCsvFileToServer.bind(this.handler));
+        this.router.post('/upload-csv', this.upload.single('file'), this.handler.uploadCsvFileToServer.bind(this.handler));
     }
 }

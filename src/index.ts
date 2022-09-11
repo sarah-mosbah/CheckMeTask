@@ -9,6 +9,7 @@ const port = process.env.PORT;
 const host = process.env.HOST;
 const productRoutes = new ProductRoutes();
 app.use(express.urlencoded({extended: true}));
+app.use(express.json());
 
 app.use('/api/products', productRoutes.router.bind(productRoutes));
 
